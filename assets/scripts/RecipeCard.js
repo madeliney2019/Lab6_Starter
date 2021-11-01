@@ -1,7 +1,8 @@
 class RecipeCard extends HTMLElement {
   constructor() {
     // Part 1 Expose - TODO
-
+    super();
+    let shadow = this.attachShadow({mode: 'open'});
     // You'll want to attach the shadow DOM here
   }
 
@@ -100,6 +101,63 @@ class RecipeCard extends HTMLElement {
     // created in the constructor()
 
     // Part 1 Expose - TODO
+
+    //image
+    const picture = document.createElement('img');
+    picture.setAttribute('src', searchForKey(data, 'thumbnailUrl'));
+    picture.setAttribute('alt', searchForKey(data, 'headline'));
+    card.appendChild(picture);
+
+    //title with link
+    const firstPar = document.createElement('p');
+    firstPar.setAttribute('class', searchForKey(data, 'headline'));
+    const titleLink = document.createElement('a');
+    titleLink.setAttribute('href', data.getUrl());
+    titleLink.innerText = searchForKey(data, 'title');
+    firstPar.appendChild(titleLink);
+    card.appendChild(firstPar);
+
+    //organization
+    const secondPar = document.createElement('p');
+    secondPar.setAttribute('href', 'oranization');
+    secondPar.innerHTML = data.getOrganization();
+    card.appendChild(secondPar);
+
+    //rating
+    const ratingDiv = document.createElement('div');
+    ratingDiv.setAttribute('class', 'rating');
+    const rating = searchForKey(data, 'rating');
+    const rateSpan = document.createElement('span');
+    card.appendChild(rateSpan);
+    if (rating == undefined) {
+      rateSpan.innerText = 'No Reviews';
+    }
+    else {
+      rateSpan.innerText = rating;
+      const ratingStars = document.createElement('img');
+      const starPath = "assets/images/icons/" + rating + "-star.svg";
+      ratingStars.setAttribute('src', starPath);
+      ratingStars.setAttribute('alt', rating + " stars");
+      card.appendChild(ratingStars);
+    }
+    card.appendChild(ratingDiv);
+
+    //time
+    const timePart = document.createElement('time');
+    const findTime = convertTime(searchForKey(data, 'time'));
+    timePart.innerText = findTime;
+    card.appendChild(timePart);
+
+    //ingredients
+    const lastPar = document.createElement('p');
+    lastPar.setAttribute('class', 'ingredients');
+    const ingredientsList = searchForKey(data, 'ingredients');
+    titleLink.innerText = ingredientsList;
+    card.appendChild(lastPar);
+
+    //connect to shadow DOM root
+    shadow.appendChild(card);
+    shadow.appendChild(styleElem)
   }
 }
 
